@@ -1,21 +1,12 @@
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtCore import QUrl
-from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWebEngineWidgets import *
 
-import sys
-
-class MainWindow(QMainWindow):
-
+class WebEnginePage(QWebEnginePage):
     def __init__(self, *args, **kwargs):
-        super(MainWindow,self).__init__(*args, **kwargs)
-
-        self.browser = QWebEngineView()
-        self.browser.setUrl(QUrl("http://www.discord.com/app"))
-
-        self.setCentralWidget(self.browser)
-
-        self.show()
+        QWebEnginePage.__init__(self, *args, **kwargs)
+        self.featurePermissionRequested.connect(self.onFeaturePermissionRequested)
 
     def onFeaturePermissionRequested(self, url, feature):
         if feature in (QWebEnginePage.MediaAudioCapture, 
@@ -25,11 +16,13 @@ class MainWindow(QMainWindow):
         else:
             self.setFeaturePermission(url, feature, QWebEnginePage.PermissionDeniedByUser)
 
+app = QApplication([])
+app.setWindowTitle("MiniCord")
+app.setWindowIcon(QIcon('icon.png'))
 
-app = QApplication(sys.argv)
-window = MainWindow()
-window.setWindowTitle("MiniCord")
-window.setWindowIcon(QIcon('icon.png'))
-window.setStyleSheet("background-color: grey;")
-
+view = QWebEngineView()
+page = WebEnginePage()
+view.setPage(page)
+view.load(QUrl("https://test.webrtc.org/"))
+view.show()
 app.exec_()
