@@ -17,12 +17,14 @@ class WebEnginePage(QWebEnginePage):
             self.setFeaturePermission(url, feature, QWebEnginePage.PermissionDeniedByUser)
 
 app = QApplication([])
-app.setWindowTitle("MiniCord")
-app.setWindowIcon(QIcon('icon.png'))
 
 view = QWebEngineView()
 page = WebEnginePage()
 view.setPage(page)
-view.load(QUrl("https://test.webrtc.org/"))
-view.show()
+view.load(QUrl("https://discord.com/app"))
+
+view.setWindowTitle("MiniCord")
+view.setWindowIcon(QIcon('icon.png'))
+view.showMaximized()
+
 app.exec_()
