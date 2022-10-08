@@ -17,6 +17,15 @@ class MainWindow(QMainWindow):
 
         self.show()
 
+    def onFeaturePermissionRequested(self, url, feature):
+        if feature in (QWebEnginePage.MediaAudioCapture, 
+            QWebEnginePage.MediaVideoCapture, 
+            QWebEnginePage.MediaAudioVideoCapture):
+            self.setFeaturePermission(url, feature, QWebEnginePage.PermissionGrantedByUser)
+        else:
+            self.setFeaturePermission(url, feature, QWebEnginePage.PermissionDeniedByUser)
+
+
 app = QApplication(sys.argv)
 window = MainWindow()
 window.setWindowTitle("MiniCord")
